@@ -40,8 +40,6 @@ class NotificationHelper(private val context: Context) {
         val message = "Order $orderNumber - $status"
 
         val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_quickbite_logo)
-            .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)

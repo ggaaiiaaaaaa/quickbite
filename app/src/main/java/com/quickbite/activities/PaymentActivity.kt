@@ -84,6 +84,8 @@ class PaymentActivity : AppCompatActivity() {
                 val orderType = intent.getStringExtra("order_type") ?: "Dine-In"
                 val tableNumber = intent.getStringExtra("table_number") ?: ""
                 val pickupTime = intent.getStringExtra("pickup_time") ?: ""
+                val promoCode = intent.getStringExtra("promo_code") ?: ""
+                val specialInstructions = intent.getStringExtra("special_instructions") ?: ""
 
                 // Convert cart items to order items
                 val orderItems = CartManager.getItems().map { cartItem ->
@@ -97,7 +99,7 @@ class PaymentActivity : AppCompatActivity() {
 
                 val orderRequest = OrderRequest(
                     userId = prefHelper.getUserId(),
-                    branchId = prefHelper.prefs.getInt("selected_branch_id", 1),
+                    branchId = prefHelper.getSelectedBranchId(),
                     orderType = orderType,
                     tableNumber = tableNumber,
                     pickupTime = pickupTime,
@@ -106,8 +108,8 @@ class PaymentActivity : AppCompatActivity() {
                     subtotal = CartManager.getSubtotal(),
                     discount = CartManager.getDiscount(),
                     total = CartManager.getTotal(),
-                    promoCode = "",
-                    specialInstructions = ""
+                    promoCode = promoCode,
+                    specialInstructions = specialInstructions
                 )
 
                 val response = dbHelper.submitOrder(orderRequest)
