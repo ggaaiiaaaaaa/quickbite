@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.quickbite.database.AppDatabase
-import com.quickbite.activities.databinding.ActivityAuthBinding
+import com.quickbite.databinding.ActivityAuthBinding
 import com.quickbite.repository.FirebaseAuthRepository
 import kotlinx.coroutines.launch
 

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.quickbite.adapters.BranchAdapter
-import com.quickbite.activities.databinding.ActivityBranchSelectBinding // Corrected import
+import com.quickbite.databinding.ActivityBranchSelectBinding // Corrected import
 import com.quickbite.models.Branch
 import com.quickbite.utils.DatabaseHelper
 import com.quickbite.utils.PreferenceHelper

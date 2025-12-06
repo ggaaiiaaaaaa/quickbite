@@ -1,4 +1,4 @@
-package com.quickbite.fragments
+package com.quickbite.utils
 
 import com.quickbite.models.CartItem
 

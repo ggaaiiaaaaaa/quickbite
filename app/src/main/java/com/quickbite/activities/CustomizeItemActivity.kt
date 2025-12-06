@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.quickbite.activities.databinding.ActivityCustomizeItemBinding
+import com.quickbite.databinding.ActivityCustomizeItemBinding
 import com.quickbite.models.CartItem
 import com.quickbite.models.CustomizationOptions
 import com.quickbite.utils.CartManager
