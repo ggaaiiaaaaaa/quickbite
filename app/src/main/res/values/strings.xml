@@ -1,3 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">QuickBite</string>
+
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+
+    <!-- Menu -->
+    <string name="search_hint">Search for donuts, coffee…</string>
+    <string name="featured_promos">Featured Promos</string>
+    <string name="categories">Categories</string>
+    <string name="seasonal_specials">Seasonal Specials</string>
+
+    <!-- Cart -->
+    <string name="my_cart">My Cart</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="total">Total</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+
+    <!-- Order -->
+    <string name="dine_in">Dine-In</string>
+    <string name="take_out">Take-Out</string>
+    <string name="drive_thru">Drive-Thru</string>
+    <string name="pay_now">Pay Now</string>
+
+    <!-- Profile -->
+    <string name="order_history">Order History</string>
+    <string name="favorites">Favorite Items</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="logout">Logout</string>
 </resources>

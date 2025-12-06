@@ -6,4 +6,23 @@
     </style>
 
     <style name="Theme.App" parent="Base.Theme.App" />
+    <!-- Base application theme. -->
+    <style name="Theme.QuickBite" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dunkin_orange</item>
+        <item name="colorPrimaryVariant">@color/dunkin_orange_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/dunkin_pink</item>
+        <item name="colorSecondaryVariant">@color/dunkin_pink_variant</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.QuickBite.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/dunkin_orange</item>
+        <item name="android:statusBarColor">@color/dunkin_orange</item>
+    </style>
 </resources>

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.quickbite.adapters.BranchAdapter
-import com.quickbite.databinding.ActivityBranchSelectBinding
+import com.quickbite.activities.databinding.ActivityBranchSelectBinding // Corrected import
 import com.quickbite.models.Branch
 import com.quickbite.utils.DatabaseHelper
 import com.quickbite.utils.PreferenceHelper
@@ -36,7 +36,10 @@ class BranchSelectActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // If the user is a guest, they shouldn't go back to the Auth screen
+        if (!prefHelper.isGuestMode()) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -70,12 +73,16 @@ class BranchSelectActivity : AppCompatActivity() {
     }
 
     private fun onBranchSelected(branch: Branch) {
-        prefHelper.prefs.edit().putInt("selected_branch_id", branch.id).apply()
+        // Use the dedicated helper method to save the branch ID
+        prefHelper.saveSelectedBranch(branch.id)
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        // This will take the user back to the previous activity.
+        // If coming from login, it might be better to override onBackPressed()
+        // for more specific navigation logic.
         finish()
         return true
     }

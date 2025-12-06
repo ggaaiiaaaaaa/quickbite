@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,16 +15,41 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App">
+        android:theme="@style/Theme.QuickBite"
+        tools:targetApi="31">
+
+        <!-- Firebase Messaging Service -->
+        <service
+            android:name="com.quickbite.services.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Activities -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name="com.quickbite.activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QuickBite.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.quickbite.activities.AuthActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.RegisterActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.BranchSelectActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.MainActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.ProductDetailActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.CustomizeItemActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.OrderTypeActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.PaymentActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.OrderTrackingActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.OrderCompleteActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.OrderHistoryActivity" android:exported="false" />
+
     </application>
 
 </manifest>

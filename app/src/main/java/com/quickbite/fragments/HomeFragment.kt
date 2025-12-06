@@ -1,5 +1,4 @@
 package com.quickbite.fragments
-
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -7,17 +6,18 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
 import com.quickbite.activities.ProductDetailActivity
 import com.quickbite.adapters.CategoryAdapter
 import com.quickbite.adapters.MenuProductAdapter
 import com.quickbite.adapters.PromoAdapter
+import com.quickbite.database.AppDatabase
 import com.quickbite.databinding.FragmentHomeBinding
-import com.quickbite.utils.DatabaseHelper
+import com.quickbite.repository.FirebaseProductRepository
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -25,11 +25,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var productRepository: FirebaseProductRepository
     private lateinit var menuAdapter: MenuProductAdapter
     private lateinit var seasonalAdapter: MenuProductAdapter
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var promoAdapter: PromoAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +42,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dbHelper = DatabaseHelper()
+        productRepository = FirebaseProductRepository(
+            FirebaseFirestore.getInstance(),
+            AppDatabase.getDatabase(requireContext())
+        )
+
         setupRecyclerViews()
         setupSearchBar()
         loadData()
@@ -77,9 +80,8 @@ class HomeFragment : Fragment() {
             adapter = menuAdapter
         }
 
-        // Featured Promos
-        promoAdapter = PromoAdapter()
-        binding.vpFeaturedPromos.adapter = promoAdapter
+        // Promos
+        binding.vpFeaturedPromos.adapter = PromoAdapter()
     }
 
     private fun setupSearchBar() {
@@ -92,83 +94,61 @@ class HomeFragment : Fragment() {
                 if (query.length >= 3) {
                     searchProducts(query)
                 } else if (query.isEmpty()) {
-                    loadMenu()
+                    loadAllProducts()
                 }
             }
         })
-
-        binding.ivFilter.setOnClickListener {
-            // Show filter dialog
-            showFilterDialog()
-        }
     }
 
     private fun loadData() {
         binding.progressBar.visibility = View.VISIBLE
 
+        // Load categories
+        val categories = listOf("All", "Donuts", "Coffee", "Beverages", "Breakfast", "Snacks")
+        categoryAdapter.submitList(categories)
+
+        // Load seasonal items from SQLite (synced from Firebase)
         lifecycleScope.launch {
-            try {
-                // Load categories
-                val categories = listOf("All", "Donuts", "Coffee", "Beverages", "Breakfast", "Snacks")
-                categoryAdapter.submitList(categories)
-
-                // Load seasonal items
-                val seasonalResponse = dbHelper.fetchSeasonalItems()
-                if (seasonalResponse.success) {
-                    seasonalAdapter.submitList(seasonalResponse.products)
-                }
-
-                // Load all menu items
-                loadMenu()
-
-                binding.progressBar.visibility = View.GONE
-            } catch (e: Exception) {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            productRepository.getSeasonalProducts().collect { products ->
+                seasonalAdapter.submitList(products.map { it.toProduct() })
             }
         }
+
+        // Load all products
+        loadAllProducts()
+
+        binding.progressBar.visibility = View.GONE
     }
 
-    private fun loadMenu(category: String? = null) {
+    private fun loadAllProducts() {
         lifecycleScope.launch {
-            try {
-                val response = dbHelper.fetchMenu(category)
-                if (response.success) {
-                    menuAdapter.submitList(response.products)
-                }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun searchProducts(query: String) {
-        lifecycleScope.launch {
-            try {
-                val response = dbHelper.searchProducts(query)
-                if (response.success) {
-                    menuAdapter.submitList(response.products)
-                }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            productRepository.getLocalProducts().collect { products ->
+                menuAdapter.submitList(products.map { it.toProduct() })
             }
         }
     }
 
     private fun filterByCategory(category: String) {
         if (category == "All") {
-            loadMenu()
+            loadAllProducts()
         } else {
-            loadMenu(category)
+            lifecycleScope.launch {
+                productRepository.getProductsByCategory(category).collect { products ->
+                    menuAdapter.submitList(products.map { it.toProduct() })
+                }
+            }
         }
     }
 
-    private fun showFilterDialog() {
-        // Implement filter bottom sheet
-        Toast.makeText(requireContext(), "Filter dialog coming soon", Toast.LENGTH_SHORT).show()
+    private fun searchProducts(query: String) {
+        lifecycleScope.launch {
+            productRepository.searchProducts(query).collect { products ->
+                menuAdapter.submitList(products.map { it.toProduct() })
+            }
+        }
     }
 
-    private fun openProductDetails(productId: Int) {
+    private fun openProductDetails(productId: String) {
         val intent = Intent(requireContext(), ProductDetailActivity::class.java)
         intent.putExtra("product_id", productId)
         startActivity(intent)
@@ -179,3 +159,21 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
+// Extension function to convert Entity to Model
+private fun com.quickbite.database.entities.ProductEntity.toProduct() =
+    com.quickbite.models.Product(
+        id = this.id.toIntOrNull() ?: 0,
+        name = this.name,
+        description = this.description,
+        price = this.price,
+        category = this.category,
+        imageUrl = this.imageUrl,
+        isSeasonal = this.isSeasonal,
+        isFreshToday = this.isFreshToday,
+        calories = this.calories,
+        fat = this.fat,
+        carbs = this.carbs,
+        protein = this.protein,
+        allergens = this.allergens
+    )

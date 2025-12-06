@@ -3,16 +3,23 @@ package com.quickbite.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.quickbite.R
+import com.quickbite.database.AppDatabase
 import com.quickbite.databinding.ActivityMainBinding
 import com.quickbite.fragments.CartFragment
 import com.quickbite.fragments.HomeFragment
 import com.quickbite.fragments.OrderHistoryFragment
 import com.quickbite.fragments.ProfileFragment
+import com.quickbite.repository.FirebaseProductRepository
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var productRepository: FirebaseProductRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,11 +27,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+        // Initialize repository
+        productRepository = FirebaseProductRepository(
+            FirebaseFirestore.getInstance(),
+            AppDatabase.getDatabase(this)
+        )
+
+        // Sync products from Firebase to SQLite
+        syncData()
+
         setupBottomNavigation()
 
-        // Load home fragment by default
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
+        }
+    }
+
+    private fun syncData() {
+        lifecycleScope.launch {
+            productRepository.syncProductsFromFirebase()
         }
     }
 
