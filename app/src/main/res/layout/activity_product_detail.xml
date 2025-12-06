@@ -1,0 +1,209 @@
+// ----------------------------------------------------------------------------
+    <?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/dunkin_orange">
+
+            <ImageView
+                android:id="@+id/ivProductImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder_donut"
+                app:layout_collapseMode="parallax"/>
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_back"
+                app:layout_collapseMode="pin"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Chocolate Glazed Donut"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₱45.00"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/dunkin_orange"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvProductName"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFreshTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Freshly Baked Today"
+                android:textColor="@android:color/white"
+                app:chipBackgroundColor="@color/dunkin_pink"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@id/tvProductPrice"
+                app:layout_constraintBottom_toBottomOf="@id/tvProductPrice"
+                app:layout_constraintStart_toEndOf="@id/tvProductPrice"/>
+
+            <TextView
+                android:id="@+id/tvDescriptionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/tvProductPrice"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvProductDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Delicious donut with rich chocolate glaze and soft fluffy texture"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvDescriptionLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvNutritionalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nutritional Information"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/tvProductDescription"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/llNutritionalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:padding="12dp"
+                android:background="@drawable/bg_rounded_light"
+                app:layout_constraintTop_toBottomOf="@id/tvNutritionalLabel">
+
+                <TextView
+                    android:id="@+id/tvCalories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calories: 250 kcal"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/tvFat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fat: 12g"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvCarbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carbohydrates: 35g"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvProtein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Protein: 4g"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvAllergenLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Allergen Warnings"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/llNutritionalInfo"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvAllergenInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Contains: Wheat, Eggs, Milk, Soy"
+                android:textSize="13sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvAllergenLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:layout_constraintTop_toBottomOf="@id/tvAllergenInfo"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCustomize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Customize & Add to Cart"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/dunkin_orange"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:layout_gravity="bottom"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
