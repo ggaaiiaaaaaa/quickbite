@@ -55,8 +55,10 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
 
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    // Check Firebase BOM version
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+
+// Ensure all Firebase dependencies are present
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
@@ -76,4 +78,10 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Add these to your dependencies block
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 }

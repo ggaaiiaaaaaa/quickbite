@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- app/src/main/res/drawable/ic_quickbite_logo.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Donut outer circle -->
+    <path
+        android:fillColor="#FF8C00"
+        android:pathData="M60,10 A50,50 0 1,1 60,110 A50,50 0 1,1 60,10 Z"/>
+
+    <!-- Donut hole -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,35 A25,25 0 1,1 60,85 A25,25 0 1,1 60,35 Z"/>
+
+    <!-- Frosting drips -->
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M40,15 Q35,20 40,25 L45,25 Q43,20 45,15 Z"/>
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M60,12 Q55,17 60,22 L65,22 Q63,17 65,12 Z"/>
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M80,15 Q75,20 80,25 L85,25 Q83,20 85,15 Z"/>
+
+    <!-- Sprinkles -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M45,40 L50,43 L48,48 L43,45 Z"/>
+    <path
+        android:fillColor="#00FF00"
+        android:pathData="M70,45 L75,48 L73,53 L68,50 Z"/>
+    <path
+        android:fillColor="#0000FF"
+        android:pathData="M55,65 L60,68 L58,73 L53,70 Z"/>
+    <path
+        android:fillColor="#FFFF00"
+        android:pathData="M75,70 L80,73 L78,78 L73,75 Z"/>
+</vector>
