@@ -27,7 +27,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var promoManager: PromoManager
 
     private var paymentMethod = "Cash"
-    private val currentUserId: String get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val currentUserId: String get() = prefHelper.getFirebaseUid() ?: ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +56,10 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun displayOrderSummary() {
         lifecycleScope.launch {
-            // Get data from intent or calculate from cart
             val subtotal = intent.getDoubleExtra("subtotal", 0.0).takeIf { it > 0.0 }
-                ?: run {
-                    var total = 0.0
-                    cartRepository.getSubtotal(currentUserId).collect { total = it }
-                    total
-                }
+                ?: cartRepository.getCartSummary(currentUserId).subtotal
 
-            val discount = intent.getDoubleExtra("discount", 0.0).takeIf { it > 0.0 }
-                ?: promoManager.calculateDiscount(currentUserId, subtotal)
+            val discount = promoManager.calculateDiscount(currentUserId, subtotal)
 
             val total = subtotal - discount
 
@@ -123,7 +117,7 @@ class PaymentActivity : AppCompatActivity() {
                     OrderItemRequest(
                         productId = cartItem.productId.toIntOrNull() ?: 0,
                         quantity = cartItem.quantity,
-                        customizations = cartItem.customizations,
+                        customizations = cartItem.customizations, // Already JSON string
                         price = cartItem.totalPrice
                     )
                 }
@@ -132,13 +126,10 @@ class PaymentActivity : AppCompatActivity() {
                 val discount = promoManager.calculateDiscount(currentUserId, subtotal)
                 val total = subtotal - discount
 
-                // Get user ID - handle both Int and String
-                val userId = try {
-                    prefHelper.getUserId()
-                } catch (e: Exception) {
-                    // If stored as String UID, use that
-                    FirebaseAuth.getInstance().currentUser?.uid?.hashCode() ?: -1
-                }
+                // Get user ID
+                val userId = prefHelper.getUserId().takeIf { it != -1 }
+                    ?: FirebaseAuth.getInstance().currentUser?.uid?.hashCode()
+                    ?: -1
 
                 val orderRequest = OrderRequest(
                     userId = userId,

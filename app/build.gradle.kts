@@ -56,7 +56,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     // Check Firebase BOM version
-    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
 // Ensure all Firebase dependencies are present
     implementation("com.google.firebase:firebase-auth-ktx")

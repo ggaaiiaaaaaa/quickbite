@@ -6,6 +6,7 @@ import com.quickbite.database.entities.CartItemEntity
 import com.quickbite.models.CartItem
 import com.quickbite.models.CustomizationOptions
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 /**
@@ -22,7 +23,7 @@ class CartRepository(private val database: AppDatabase) {
      */
     suspend fun addToCart(userId: String, cartItem: CartItem) {
         // Check if item with same customizations exists
-        val existingItems = getCartItemsList(userId)
+        val existingItems = cartDao.getCartItems(userId).first()
         val existingItem = existingItems.find {
             it.productId == cartItem.productId.toString() &&
                     it.customizations == gson.toJson(cartItem.customizations)
@@ -60,15 +61,6 @@ class CartRepository(private val database: AppDatabase) {
     }
 
     /**
-     * Get cart items as list (for one-time queries)
-     */
-    private suspend fun getCartItemsList(userId: String): List<CartItemEntity> {
-        var items: List<CartItemEntity> = emptyList()
-        getCartItems(userId).collect { items = it }
-        return items
-    }
-
-    /**
      * Convert CartItemEntity to CartItem model
      */
     fun mapToCartItem(entity: CartItemEntity): CartItem {
@@ -77,7 +69,11 @@ class CartRepository(private val database: AppDatabase) {
             productName = entity.productName,
             basePrice = entity.basePrice,
             quantity = entity.quantity,
-            customizations = gson.fromJson(entity.customizations, CustomizationOptions::class.java),
+            customizations = try {
+                gson.fromJson(entity.customizations, CustomizationOptions::class.java)
+            } catch (e: Exception) {
+                CustomizationOptions() // Return default if parsing fails
+            },
             totalPrice = entity.totalPrice,
             imageUrl = entity.productImageUrl
         )
@@ -97,8 +93,7 @@ class CartRepository(private val database: AppDatabase) {
      * Update item quantity by position
      */
     suspend fun updateQuantity(userId: String, position: Int, newQuantity: Int) {
-        var items: List<CartItemEntity> = emptyList()
-        getCartItems(userId).collect { items = it }
+        val items = cartDao.getCartItems(userId).first()
 
         if (position in items.indices && newQuantity > 0) {
             val item = items[position]
@@ -121,8 +116,7 @@ class CartRepository(private val database: AppDatabase) {
      * Remove item by position
      */
     suspend fun removeItemByPosition(userId: String, position: Int) {
-        var items: List<CartItemEntity> = emptyList()
-        getCartItems(userId).collect { items = it }
+        val items = cartDao.getCartItems(userId).first()
 
         if (position in items.indices) {
             cartDao.deleteCartItem(items[position])
@@ -181,8 +175,7 @@ class CartRepository(private val database: AppDatabase) {
      * Get cart summary (for checkout)
      */
     suspend fun getCartSummary(userId: String): CartSummary {
-        var items: List<CartItemEntity> = emptyList()
-        getCartItems(userId).collect { items = it }
+        val items = cartDao.getCartItems(userId).first()
 
         val subtotal = items.sumOf { it.totalPrice }
         val itemCount = items.size

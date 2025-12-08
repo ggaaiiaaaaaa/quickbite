@@ -11,12 +11,14 @@ class PreferenceHelper(context: Context) {
     companion object {
         private const val PREF_NAME = "QuickBitePrefs"
         private const val KEY_USER_ID = "userId"
+        private const val KEY_USER_UID = "userUid" // Firebase UID
         private const val KEY_USER_NAME = "userName"
         private const val KEY_EMAIL = "email"
         private const val KEY_IS_GUEST = "isGuest"
-        private const val KEY_SELECTED_BRANCH_ID = "selected_branch_id" // Key for branch ID
+        private const val KEY_SELECTED_BRANCH_ID = "selected_branch_id"
     }
 
+    // Save user data with both Int ID and String UID
     fun saveUserData(userId: Int, userName: String?, email: String?) {
         sharedPreferences.edit()
             .putInt(KEY_USER_ID, userId)
@@ -25,14 +27,34 @@ class PreferenceHelper(context: Context) {
             .apply()
     }
 
+    // Save Firebase UID separately
+    fun saveFirebaseUid(uid: String) {
+        sharedPreferences.edit()
+            .putString(KEY_USER_UID, uid)
+            .apply()
+    }
+
+    // Get Integer user ID (for legacy/database operations)
     fun getUserId(): Int {
         return sharedPreferences.getInt(KEY_USER_ID, -1)
     }
 
+    // Get Firebase UID string
+    fun getFirebaseUid(): String? {
+        return sharedPreferences.getString(KEY_USER_UID, null)
+    }
+
+    // Get user name
+    fun getUserName(): String {
+        return sharedPreferences.getString(KEY_USER_NAME, "Guest User") ?: "Guest User"
+    }
+
+    // Get saved email
     fun getSavedEmail(): String {
         return sharedPreferences.getString(KEY_EMAIL, "") ?: ""
     }
 
+    // Guest mode functions
     fun setGuestMode(isGuest: Boolean) {
         sharedPreferences.edit().putBoolean(KEY_IS_GUEST, isGuest).apply()
     }
@@ -41,17 +63,34 @@ class PreferenceHelper(context: Context) {
         return sharedPreferences.getBoolean(KEY_IS_GUEST, false)
     }
 
-    // New function to save the selected branch ID
+    // Branch selection
     fun saveSelectedBranch(branchId: Int) {
         sharedPreferences.edit().putInt(KEY_SELECTED_BRANCH_ID, branchId).apply()
     }
 
-    // Optional: Function to retrieve the branch ID if needed later
     fun getSelectedBranchId(): Int {
         return sharedPreferences.getInt(KEY_SELECTED_BRANCH_ID, -1)
     }
 
+    // Clear all user data
+    fun clearUserData() {
+        sharedPreferences.edit()
+            .remove(KEY_USER_ID)
+            .remove(KEY_USER_UID)
+            .remove(KEY_USER_NAME)
+            .remove(KEY_EMAIL)
+            .remove(KEY_IS_GUEST)
+            .remove(KEY_SELECTED_BRANCH_ID)
+            .apply()
+    }
+
+    // Clear everything
     fun clearAll() {
         sharedPreferences.edit().clear().apply()
+    }
+
+    // Check if user is logged in
+    fun isLoggedIn(): Boolean {
+        return getFirebaseUid() != null || getUserId() != -1
     }
 }
