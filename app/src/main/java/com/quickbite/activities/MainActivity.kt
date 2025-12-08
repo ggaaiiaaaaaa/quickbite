@@ -1,137 +1,82 @@
 package com.quickbite.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.quickbite.R
 import com.quickbite.database.AppDatabase
-import com.quickbite.databinding.ActivityAuthBinding
-import com.quickbite.repository.FirebaseAuthRepository
-import com.quickbite.utils.PreferenceHelper
+import com.quickbite.databinding.ActivityMainBinding
+import com.quickbite.fragments.CartFragment
+import com.quickbite.fragments.HomeFragment
+import com.quickbite.fragments.OrderHistoryFragment
+import com.quickbite.fragments.ProfileFragment
+import com.quickbite.repository.FirebaseProductRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
-class AuthActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAuthBinding
-    private lateinit var authRepository: FirebaseAuthRepository
-    private lateinit var prefHelper: PreferenceHelper
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var productRepository: FirebaseProductRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAuthBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize helpers
-        prefHelper = PreferenceHelper(this)
+        setSupportActionBar(binding.toolbar)
 
-        // Initialize Firebase Auth Repository
-        authRepository = FirebaseAuthRepository(
-            FirebaseAuth.getInstance(),
+        // Initialize repository
+        productRepository = FirebaseProductRepository(
             FirebaseFirestore.getInstance(),
             AppDatabase.getDatabase(this)
         )
 
-        // Check if user is already logged in
-        if (authRepository.currentUser != null) {
-            navigateToMain()
-            return
-        }
+        // Sync products from Firebase to SQLite
+        syncData()
 
-        setupClickListeners()
-    }
+        setupBottomNavigation()
 
-    private fun setupClickListeners() {
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
-
-            if (validateInput(email, password)) {
-                performLogin(email, password)
-            }
-        }
-
-        binding.btnRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
-        }
-
-        binding.btnGuest.setOnClickListener {
-            lifecycleScope.launch {
-                authRepository.signInAnonymously().fold(
-                    onSuccess = {
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid
-                        if (uid != null) {
-                            // Save guest mode
-                            prefHelper.setGuestMode(true)
-                            prefHelper.saveFirebaseUid(uid)
-                            prefHelper.saveUserData(-1, "Guest User", "")
-                        }
-                        navigateToMain()
-                    },
-                    onFailure = { e ->
-                        Toast.makeText(this@AuthActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+        if (savedInstanceState == null) {
+            loadFragment(HomeFragment())
         }
     }
 
-    private fun validateInput(email: String, password: String): Boolean {
-        if (email.isEmpty()) {
-            binding.tilEmail.error = "Email is required"
-            return false
-        }
-        if (password.isEmpty()) {
-            binding.tilPassword.error = "Password is required"
-            return false
-        }
-        binding.tilEmail.error = null
-        binding.tilPassword.error = null
-        return true
-    }
-
-    private fun performLogin(email: String, password: String) {
+    private fun syncData() {
         lifecycleScope.launch {
-            val result = authRepository.login(email, password)
-            result.fold(
-                onSuccess = {
-                    // Get user data from Firebase
-                    val user = FirebaseAuth.getInstance().currentUser
-                    if (user != null) {
-                        try {
-                            val userDoc = FirebaseFirestore.getInstance()
-                                .collection("users")
-                                .document(user.uid)
-                                .get()
-                                .await()
-
-                            val userName = userDoc.getString("name") ?: user.email ?: "User"
-                            val userEmail = user.email ?: ""
-
-                            // Save to preferences
-                            prefHelper.saveFirebaseUid(user.uid)
-                            prefHelper.saveUserData(user.uid.hashCode(), userName, userEmail)
-                            prefHelper.setGuestMode(false)
-
-                            Toast.makeText(this@AuthActivity, "Login successful!", Toast.LENGTH_SHORT).show()
-                            navigateToMain()
-                        } catch (e: Exception) {
-                            Toast.makeText(this@AuthActivity, "Error loading user data", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                },
-                onFailure = { error ->
-                    Toast.makeText(this@AuthActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            )
+            productRepository.syncProductsFromFirebase()
         }
     }
 
-    private fun navigateToMain() {
-        startActivity(Intent(this, BranchSelectActivity::class.java))
-        finish()
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+                R.id.nav_cart -> {
+                    loadFragment(CartFragment())
+                    true
+                }
+                R.id.nav_orders -> {
+                    loadFragment(OrderHistoryFragment())
+                    true
+                }
+                R.id.nav_profile -> {
+                    loadFragment(ProfileFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }

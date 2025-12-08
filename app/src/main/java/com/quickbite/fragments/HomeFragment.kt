@@ -64,16 +64,18 @@ class HomeFragment : Fragment() {
 
         // Seasonal Items
         seasonalAdapter = MenuProductAdapter { product ->
-            openProductDetails(product.id)
+            // Convert the Int ID to a String before passing it
+            openProductDetails(product.id.toString())
         }
         binding.rvSeasonalItems.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = seasonalAdapter
         }
 
-        // All Menu Items
+// All Menu Items
         menuAdapter = MenuProductAdapter { product ->
-            openProductDetails(product.id)
+            // Also convert the Int ID to a String here
+            openProductDetails(product.id.toString())
         }
         binding.rvMenuItems.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
