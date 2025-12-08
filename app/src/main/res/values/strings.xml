@@ -33,4 +33,19 @@
     <string name="favorites">Favorite Items</string>
     <string name="payment_methods">Payment Methods</string>
     <string name="logout">Logout</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Admin Dashboard -->
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="sales_overview">Sales Overview</string>
+    <string name="total_sales">Total Sales: $12,345</string>
+    <string name="todays_sales">Today's Sales: $567</string>
+    <string name="customer_overview">Customer Overview</string>
+    <string name="total_customers">Total Customers: 1,234</string>
+    <string name="new_customers_today">New Customers Today: 12</string>
+    <string name="revenue_charts">Revenue Charts</string>
+    <string name="revenue_charts_placeholder">Weekly, Monthly, Yearly charts will be displayed here.</string>
 </resources>

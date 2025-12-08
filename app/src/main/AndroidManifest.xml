@@ -49,6 +49,8 @@
         <activity android:name="com.quickbite.activities.OrderTrackingActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.OrderCompleteActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.OrderHistoryActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.AdminDashboardActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.ViewProductsActivity" android:exported="false" />
 
     </application>
 
