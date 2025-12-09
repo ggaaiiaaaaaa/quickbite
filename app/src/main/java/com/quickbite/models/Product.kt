@@ -10,7 +10,9 @@ data class Product(
     val description: String = "",
     val price: Double = 0.0,
     val imageUrl: String = "",
-    val rating: Double = 0.0,
-    val ratingsCount: Int = 0,
-    val category: String = ""
+    val category: String = "",
+    val nutritionalInfo: String = "",
+    val ingredients: List<String> = emptyList(),
+    var isAvailable: Boolean = true,
+    var availabilitySchedule: String = "" // e.g., "Breakfast", "Lunch", "Dinner"
 ) : Parcelable

@@ -39,6 +39,7 @@
         </activity>
 
         <activity android:name="com.quickbite.activities.AuthActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.AdminAuthActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.RegisterActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.BranchSelectActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.MainActivity" android:exported="false" />
@@ -51,6 +52,20 @@
         <activity android:name="com.quickbite.activities.OrderHistoryActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.AdminDashboardActivity" android:exported="false" />
         <activity android:name="com.quickbite.activities.ViewProductsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.TransactionsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.LiveOrdersActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.OrderDetailsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.MenuManagementActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.AddEditProductActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.InventoryActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.AddEditInventoryItemActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.ReportsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.SalesReportsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.PerformanceAnalyticsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.UserManagementActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.CustomerAccountsActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.StaffManagementActivity" android:exported="false" />
+        <activity android:name="com.quickbite.activities.AddEditStaffActivity" android:exported="false" />
 
     </application>
 

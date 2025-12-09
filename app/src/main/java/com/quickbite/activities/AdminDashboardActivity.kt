@@ -3,14 +3,16 @@ package com.quickbite.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.quickbite.R
 import com.google.android.material.navigation.NavigationView
+import com.quickbite.R
 
 class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,6 +36,8 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
 
         loadAdminInfo()
+        handleUserRole()
+        loadRealTimeData()
     }
 
     private fun loadAdminInfo() {
@@ -44,6 +48,39 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         // TODO: Replace with your logic to get the admin's name
         adminNameTextView.text = "Admin User"
     }
+
+    private fun handleUserRole() {
+        val userRole = intent.getStringExtra("USER_ROLE")
+        val tvUserRole = findViewById<TextView>(R.id.tvUserRole)
+        val llRoleBasedButtons = findViewById<LinearLayout>(R.id.llRoleBasedButtons)
+        val llManagerButtons = findViewById<LinearLayout>(R.id.llManagerButtons)
+        val llKitchenStaffButtons = findViewById<LinearLayout>(R.id.llKitchenStaffButtons)
+        val llCashierButtons = findViewById<LinearLayout>(R.id.llCashierButtons)
+
+        if (userRole != null) {
+            tvUserRole.text = "Role: ${userRole.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }}"
+            tvUserRole.visibility = View.VISIBLE
+            llRoleBasedButtons.visibility = View.VISIBLE
+
+            when (Role.valueOf(userRole)) {
+                Role.MANAGER -> llManagerButtons.visibility = View.VISIBLE
+                Role.KITCHEN_STAFF -> llKitchenStaffButtons.visibility = View.VISIBLE
+                Role.CASHIER -> llCashierButtons.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun loadRealTimeData() {
+        // TODO: Replace with your logic to fetch real-time data from your database
+        val tvActiveOrdersCount = findViewById<TextView>(R.id.tvActiveOrdersCount)
+        val tvTodaysRevenueAmount = findViewById<TextView>(R.id.tvTodaysRevenueAmount)
+        val tvPendingOrdersCount = findViewById<TextView>(R.id.tvPendingOrdersCount)
+
+        tvActiveOrdersCount.text = "5"
+        tvTodaysRevenueAmount.text = "$567"
+        tvPendingOrdersCount.text = "2"
+    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -57,6 +94,30 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 val intent = Intent(this, ViewProductsActivity::class.java)
                 startActivity(intent)
             }
+            R.id.nav_transactions -> {
+                val intent = Intent(this, TransactionsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_order_management -> {
+                val intent = Intent(this, LiveOrdersActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_menu_management -> {
+                val intent = Intent(this, MenuManagementActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_inventory -> {
+                val intent = Intent(this, InventoryActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_reports -> {
+                val intent = Intent(this, ReportsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_user_management -> {
+                val intent = Intent(this, UserManagementActivity::class.java)
+                startActivity(intent)
+            }
             R.id.nav_sign_out -> {
                 signOut()
             }
@@ -68,6 +129,10 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
     private fun signOut() {
         // TODO: Add your sign-out logic here (e.g., clear session, navigate to login)
         Toast.makeText(this, "Signing out...", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, AdminAuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onBackPressed() {

@@ -48,4 +48,12 @@
     <string name="new_customers_today">New Customers Today: 12</string>
     <string name="revenue_charts">Revenue Charts</string>
     <string name="revenue_charts_placeholder">Weekly, Monthly, Yearly charts will be displayed here.</string>
+    <string name="active_orders">Active Orders</string>
+    <string name="active_orders_count">5</string>
+    <string name="todays_revenue">Today's Revenue</string>
+    <string name="todays_revenue_amount">$567</string>
+    <string name="pending_orders">Pending Orders</string>
+    <string name="pending_orders_count">2</string>
+    <string name="peak_hours_analysis">Peak Hours Analysis</string>
+    <string name="peak_hours_placeholder">Analysis of peak hours will be displayed here.</string>
 </resources>

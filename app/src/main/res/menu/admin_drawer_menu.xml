@@ -12,6 +12,30 @@
         android:id="@+id/nav_view_products"
         android:icon="@drawable/ic_view_products"
         android:title="View Products" />
+    <item
+        android:id="@+id/nav_transactions"
+        android:icon="@drawable/ic_transactions"
+        android:title="Transactions" />
+    <item
+        android:id="@+id/nav_order_management"
+        android:icon="@drawable/ic_order_management"
+        android:title="Order Management" />
+    <item
+        android:id="@+id/nav_menu_management"
+        android:icon="@drawable/ic_menu_management"
+        android:title="Menu Management" />
+    <item
+        android:id="@+id/nav_inventory"
+        android:icon="@drawable/ic_inventory"
+        android:title="Inventory" />
+    <item
+        android:id="@+id/nav_reports"
+        android:icon="@drawable/ic_reports"
+        android:title="Reports &amp; Analytics" />
+    <item
+        android:id="@+id/nav_user_management"
+        android:icon="@drawable/ic_user_management"
+        android:title="User Management" />
 
     <item android:title="">
         <menu>
