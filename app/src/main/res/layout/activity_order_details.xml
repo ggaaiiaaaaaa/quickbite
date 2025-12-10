@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".activities.OrderDetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvOrderDetailsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Details"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvOrderIdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order ID:"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrderDetailsTitle"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvOrderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="#12345"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderIdLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderIdLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvOrderIdLabel"/>
+
+        <TextView
+            android:id="@+id/tvOrderStatusLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status:"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrderIdLabel"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Spinner
+            android:id="@+id/spinnerStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderStatusLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderStatusLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvOrderStatusLabel"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <Button
+            android:id="@+id/btnUpdateStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Status"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerStatus"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/btnUpdateStatus"/>
+
+        <TextView
+            android:id="@+id/tvKitchenDisplayTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kitchen Display"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvAssignToLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assign to:"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvKitchenDisplayTitle"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Spinner
+            android:id="@+id/spinnerKitchenStaff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/tvAssignToLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAssignToLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvAssignToLabel"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <CheckBox
+            android:id="@+id/cbPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android.text="Mark as Priority"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerKitchenStaff"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPrepTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Estimated Prep Time (mins)"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/cbPriority"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPrepTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSendToKitchen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send to Kitchen"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/tilPrepTime"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

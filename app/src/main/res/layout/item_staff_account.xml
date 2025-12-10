@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvStaffName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Staff Name"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvStaffRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role: Manager" />
+
+    <Button
+        android:id="@+id/btnEditStaff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit" />
+
+</LinearLayout>
