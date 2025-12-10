@@ -10,8 +10,7 @@ import com.quickbite.databinding.ItemProductBinding
 import com.quickbite.models.Product
 
 class ProductAdapter(
-    private val onEditClick: (Product) -> Unit,
-    private val onDeleteClick: (Product) -> Unit
+    private val onProductClick: (Product) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -36,8 +35,7 @@ class ProductAdapter(
                     .load(product.imageUrl)
                     .into(ivProductImage)
 
-                btnEdit.setOnClickListener { onEditClick(product) }
-                btnDelete.setOnClickListener { onDeleteClick(product) }
+                root.setOnClickListener { onProductClick(product) }
             }
         }
     }

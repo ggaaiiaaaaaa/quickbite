@@ -7,12 +7,14 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.quickbite.R
+import com.quickbite.Role
 
 class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,6 +40,16 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         loadAdminInfo()
         handleUserRole()
         loadRealTimeData()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     private fun loadAdminInfo() {
@@ -88,7 +100,8 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 // Handle overview click
             }
             R.id.nav_add_products -> {
-                // Handle add products click
+                val intent = Intent(this, AddEditProductActivity::class.java)
+                startActivity(intent)
             }
             R.id.nav_view_products -> {
                 val intent = Intent(this, ViewProductsActivity::class.java)
@@ -118,6 +131,10 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 val intent = Intent(this, UserManagementActivity::class.java)
                 startActivity(intent)
             }
+            R.id.nav_settings -> {
+                val intent = Intent(this, SystemSettingsActivity::class.java)
+                startActivity(intent)
+            }
             R.id.nav_sign_out -> {
                 signOut()
             }
@@ -133,13 +150,5 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-    }
-
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
     }
 }
