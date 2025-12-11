@@ -16,7 +16,7 @@ class AddEditInventoryItemActivity : AppCompatActivity() {
         binding = ActivityAddEditInventoryItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        inventoryItem = intent.getParcelableExtra("inventoryItem", InventoryItem::class.java)
+        inventoryItem = intent.getParcelableExtra("inventory_item", InventoryItem::class.java)
 
         if (inventoryItem != null) {
             supportActionBar?.title = "Edit Inventory Item"
@@ -26,6 +26,8 @@ class AddEditInventoryItemActivity : AppCompatActivity() {
         } else {
             supportActionBar?.title = "Add Inventory Item"
         }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.btnSave.setOnClickListener {
             saveInventoryItem()
@@ -55,5 +57,10 @@ class AddEditInventoryItemActivity : AppCompatActivity() {
             .addOnFailureListener { 
                 Toast.makeText(this, "Failed to save item", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }

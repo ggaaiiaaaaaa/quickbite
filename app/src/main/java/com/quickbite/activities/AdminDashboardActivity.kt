@@ -26,6 +26,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Admin Dashboard"
 
         drawerLayout = findViewById(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -46,7 +47,11 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START)
                 } else {
-                    finish()
+                    if (isTaskRoot) {
+                        finishAffinity()
+                    } else {
+                        finish()
+                    }
                 }
             }
         })
@@ -97,7 +102,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_overview -> {
-                // Handle overview click
+                Toast.makeText(this, "Overview is already displayed", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_add_products -> {
                 val intent = Intent(this, AddEditProductActivity::class.java)

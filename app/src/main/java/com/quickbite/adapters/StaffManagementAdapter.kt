@@ -1,1 +1,52 @@
-package com.quickbite.adapters\n\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport android.widget.Button\nimport android.widget.TextView\nimport androidx.recyclerview.widget.RecyclerView\nimport com.quickbite.R\nimport com.quickbite.models.User\n\nclass StaffManagementAdapter(private val staff: List<User>) : RecyclerView.Adapter<StaffManagementAdapter.StaffViewHolder>() {\n\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StaffViewHolder {\n        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_staff_account, parent, false)\n        return StaffViewHolder(view)\n    }\n\n    override fun onBindViewHolder(holder: StaffViewHolder, position: Int) {\n        val staffMember = staff[position]\n        holder.bind(staffMember)\n    }\n\n    override fun getItemCount() = staff.size\n\n    class StaffViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {\n        private val nameTextView: TextView = itemView.findViewById(R.id.tvStaffName)\n        private val roleTextView: TextView = itemView.findViewById(R.id.tvStaffRole)\n        private val editButton: Button = itemView.findViewById(R.id.btnEditStaff)\n\n        fun bind(staffMember: User) {\n            nameTextView.text = staffMember.name\n            roleTextView.text = \"Role: \${staffMember.role}\"\n\n            editButton.setOnClickListener {\n                // TODO: Handle click to edit staff member\n            }\n        }\n    }\n}\n
+package com.quickbite.adapters
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.quickbite.R
+import com.quickbite.models.User
+
+class StaffManagementAdapter(
+    private val onEditClick: (User) -> Unit
+) : ListAdapter<User, StaffManagementAdapter.StaffViewHolder>(StaffDiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StaffViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_staff_account, parent, false)
+        return StaffViewHolder(view, onEditClick)
+    }
+
+    override fun onBindViewHolder(holder: StaffViewHolder, position: Int) {
+        val staffMember = getItem(position)
+        holder.bind(staffMember)
+    }
+
+    class StaffViewHolder(itemView: View, private val onEditClick: (User) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        private val nameTextView: TextView = itemView.findViewById(R.id.tvStaffName)
+        private val roleTextView: TextView = itemView.findViewById(R.id.tvStaffRole)
+        private val editButton: Button = itemView.findViewById(R.id.btnEditStaff)
+
+        fun bind(staffMember: User) {
+            nameTextView.text = staffMember.name
+            roleTextView.text = "Role: ${staffMember.role}"
+
+            editButton.setOnClickListener {
+                onEditClick(staffMember)
+            }
+        }
+    }
+}
+
+class StaffDiffCallback : DiffUtil.ItemCallback<User>() {
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem.uid == newItem.uid
+    }
+
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem == newItem
+    }
+}

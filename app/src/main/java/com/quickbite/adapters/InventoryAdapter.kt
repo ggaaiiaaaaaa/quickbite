@@ -9,12 +9,13 @@ import com.quickbite.databinding.ItemInventoryBinding
 import com.quickbite.models.InventoryItem
 
 class InventoryAdapter(
-    private val onUpdateClick: (InventoryItem) -> Unit
+    private val onUpdateClick: (InventoryItem) -> Unit,
+    private val onEditClick: (InventoryItem) -> Unit
 ) : ListAdapter<InventoryItem, InventoryAdapter.InventoryViewHolder>(InventoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
         val binding = ItemInventoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return InventoryViewHolder(binding)
+        return InventoryViewHolder(binding, onUpdateClick, onEditClick)
     }
 
     override fun onBindViewHolder(holder: InventoryViewHolder, position: Int) {
@@ -22,14 +23,18 @@ class InventoryAdapter(
         holder.bind(inventoryItem)
     }
 
-    inner class InventoryViewHolder(private val binding: ItemInventoryBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class InventoryViewHolder(
+        private val binding: ItemInventoryBinding,
+        private val onUpdateClick: (InventoryItem) -> Unit,
+        private val onEditClick: (InventoryItem) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(inventoryItem: InventoryItem) {
             binding.apply {
                 tvItemName.text = inventoryItem.name
                 tvQuantity.text = "Quantity: ${inventoryItem.quantity}"
                 btnUpdate.setOnClickListener { onUpdateClick(inventoryItem) }
+                root.setOnClickListener { onEditClick(inventoryItem) }
             }
         }
     }

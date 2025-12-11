@@ -10,12 +10,13 @@ import com.quickbite.databinding.ItemProductBinding
 import com.quickbite.models.Product
 
 class ProductAdapter(
-    private val onProductClick: (Product) -> Unit
+    private val onProductClick: (Product) -> Unit,
+    private val onEditClick: (Product) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ProductViewHolder(binding)
+        return ProductViewHolder(binding, onProductClick, onEditClick)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -23,8 +24,11 @@ class ProductAdapter(
         holder.bind(product)
     }
 
-    inner class ProductViewHolder(private val binding: ItemProductBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ProductViewHolder(
+        private val binding: ItemProductBinding,
+        private val onProductClick: (Product) -> Unit,
+        private val onEditClick: (Product) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
             binding.apply {
@@ -36,6 +40,7 @@ class ProductAdapter(
                     .into(ivProductImage)
 
                 root.setOnClickListener { onProductClick(product) }
+                btnEditProduct.setOnClickListener { onEditClick(product) }
             }
         }
     }

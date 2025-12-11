@@ -8,8 +8,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.quickbite.databinding.ActivityAddEditProductBinding
 import com.quickbite.models.Product
+import java.util.UUID
 
 class AddEditProductActivity : AppCompatActivity() {
 
@@ -29,7 +32,7 @@ class AddEditProductActivity : AppCompatActivity() {
         binding = ActivityAddEditProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        product = intent.getParcelableExtra("product")
+        product = intent.getParcelableExtra("product", Product::class.java)
 
         setupViews()
         setupClickListeners()
@@ -51,6 +54,7 @@ class AddEditProductActivity : AppCompatActivity() {
         } else {
             supportActionBar?.title = "Add Product"
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupAvailabilitySpinner() {
@@ -73,16 +77,61 @@ class AddEditProductActivity : AppCompatActivity() {
     private fun saveProduct() {
         val name = binding.etProductName.text.toString().trim()
         val description = binding.etProductDescription.text.toString().trim()
-        val price = binding.etProductPrice.text.toString().trim()
+        val price = binding.etProductPrice.text.toString().toDoubleOrNull()
         val category = binding.etProductCategory.text.toString().trim()
+        val nutritionalInfo = binding.etNutritionalInfo.text.toString().trim()
+        val ingredients = binding.etIngredients.text.toString().split(",").map { it.trim() }
+        val isAvailable = binding.swAvailability.isChecked
 
-        if (name.isEmpty() || description.isEmpty() || price.isEmpty() || category.isEmpty()) {
+        if (name.isEmpty() || description.isEmpty() || price == null || category.isEmpty()) {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // TODO: Implement image upload to Firebase Storage and save product to Firestore
-        Toast.makeText(this, "Product saved!", Toast.LENGTH_SHORT).show()
-        finish()
+        if (imageUri == null && product == null) {
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (imageUri != null) {
+            uploadImageAndSaveProduct(name, description, price, category, nutritionalInfo, ingredients, isAvailable)
+        } else {
+            saveProductToFirestore(product!!.imageUrl, name, description, price, category, nutritionalInfo, ingredients, isAvailable)
+        }
+    }
+
+    private fun uploadImageAndSaveProduct(name: String, description: String, price: Double, category: String, nutritionalInfo: String, ingredients: List<String>, isAvailable: Boolean) {
+        val storageRef = FirebaseStorage.getInstance().reference.child("product_images/${UUID.randomUUID()}")
+        storageRef.putFile(imageUri!!)
+            .addOnSuccessListener { 
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    saveProductToFirestore(uri.toString(), name, description, price, category, nutritionalInfo, ingredients, isAvailable)
+                }
+            }
+            .addOnFailureListener { 
+                Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun saveProductToFirestore(imageUrl: String, name: String, description: String, price: Double, category: String, nutritionalInfo: String, ingredients: List<String>, isAvailable: Boolean) {
+        val db = FirebaseFirestore.getInstance()
+        val collection = db.collection("products")
+
+        val id = product?.id ?: collection.document().id
+        val newProduct = Product(id, name, description, price, category, imageUrl, nutritionalInfo, ingredients, isAvailable)
+
+        collection.document(id).set(newProduct)
+            .addOnSuccessListener { 
+                Toast.makeText(this, "Product saved!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { 
+                Toast.makeText(this, "Failed to save product", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }
