@@ -26,7 +26,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Admin Dashboard"
+        supportActionBar?.title = getString(R.string.admin_dashboard)
 
         drawerLayout = findViewById(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -63,7 +63,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         val adminNameTextView = headerView.findViewById<TextView>(R.id.tvAdminName)
 
         // TODO: Replace with your logic to get the admin's name
-        adminNameTextView.text = "Admin User"
+        adminNameTextView.text = getString(R.string.admin_user)
     }
 
     private fun handleUserRole() {
@@ -75,7 +75,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
         val llCashierButtons = findViewById<LinearLayout>(R.id.llCashierButtons)
 
         if (userRole != null) {
-            tvUserRole.text = "Role: ${userRole.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }}"
+            tvUserRole.text = getString(R.string.user_role, userRole.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() })
             tvUserRole.visibility = View.VISIBLE
             llRoleBasedButtons.visibility = View.VISIBLE
 
@@ -102,7 +102,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_overview -> {
-                Toast.makeText(this, "Overview is already displayed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.overview_already_displayed), Toast.LENGTH_SHORT).show()
             }
             R.id.nav_add_products -> {
                 val intent = Intent(this, AddEditProductActivity::class.java)
@@ -150,7 +150,7 @@ class AdminDashboardActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
     private fun signOut() {
         // TODO: Add your sign-out logic here (e.g., clear session, navigate to login)
-        Toast.makeText(this, "Signing out...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.signing_out), Toast.LENGTH_SHORT).show()
         val intent = Intent(this, AdminAuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.quickbite.R
 import com.quickbite.database.AppDatabase
 import com.quickbite.databinding.ActivityAuthBinding
 import com.quickbite.repository.FirebaseAuthRepository
@@ -60,7 +61,7 @@ class AuthActivity : AppCompatActivity() {
                         navigateToMain()
                     },
                     onFailure = { e ->
-                        Toast.makeText(this@AuthActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AuthActivity, getString(R.string.error_message, e.message), Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -69,11 +70,11 @@ class AuthActivity : AppCompatActivity() {
 
     private fun validateInput(email: String, password: String): Boolean {
         if (email.isEmpty()) {
-            binding.tilEmail.error = "Email is required"
+            binding.tilEmail.error = getString(R.string.email_is_required)
             return false
         }
         if (password.isEmpty()) {
-            binding.tilPassword.error = "Password is required"
+            binding.tilPassword.error = getString(R.string.password_is_required)
             return false
         }
         // Clear errors if input is valid
@@ -87,11 +88,11 @@ class AuthActivity : AppCompatActivity() {
             val result = authRepository.login(email, password)
             result.fold(
                 onSuccess = {
-                    Toast.makeText(this@AuthActivity, "Login successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AuthActivity, getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
                     navigateToMain()
                 },
                 onFailure = { error ->
-                    Toast.makeText(this@AuthActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AuthActivity, getString(R.string.error_message, error.message), Toast.LENGTH_SHORT).show()
                 }
             )
         }

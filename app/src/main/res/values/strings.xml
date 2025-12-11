@@ -8,6 +8,14 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="continue_as_guest">Continue as Guest</string>
+    <string name="email_is_required">Email is required</string>
+    <string name="password_is_required">Password is required</string>
+    <string name="login_successful">Login successful!</string>
+    <string name="error_message">Error: %s</string>
+    <string name="name_is_required">Name is required</string>
+    <string name="phone_is_required">Phone is required</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="registration_successful">Registration successful!</string>
 
     <!-- Menu -->
     <string name="search_hint">Search for donuts, coffee…</string>
@@ -56,4 +64,9 @@
     <string name="pending_orders_count">2</string>
     <string name="peak_hours_analysis">Peak Hours Analysis</string>
     <string name="peak_hours_placeholder">Analysis of peak hours will be displayed here.</string>
+    <string name="staff_role">Role: %s</string>
+    <string name="admin_user">Admin User</string>
+    <string name="user_role">Role: %s</string>
+    <string name="overview_already_displayed">Overview is already displayed</string>
+    <string name="signing_out">Signing out...</string>
 </resources>

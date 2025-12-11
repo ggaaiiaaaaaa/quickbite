@@ -32,7 +32,7 @@ class StaffManagementAdapter(
 
         fun bind(staffMember: User) {
             nameTextView.text = staffMember.name
-            roleTextView.text = "Role: ${staffMember.role}"
+            roleTextView.text = itemView.context.getString(R.string.staff_role, staffMember.role)
 
             editButton.setOnClickListener {
                 onEditClick(staffMember)

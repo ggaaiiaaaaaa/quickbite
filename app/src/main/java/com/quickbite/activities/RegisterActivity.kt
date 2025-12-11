@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.quickbite.R
 import com.quickbite.databinding.ActivityRegisterBinding
 import com.quickbite.utils.DatabaseHelper
 import kotlinx.coroutines.launch
@@ -40,23 +41,23 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPassword = binding.etConfirmPassword.text.toString()
 
         if (name.isEmpty()) {
-            binding.tilName.error = "Name is required"
+            binding.tilName.error = getString(R.string.name_is_required)
             return false
         }
         if (email.isEmpty()) {
-            binding.tilEmail.error = "Email is required"
+            binding.tilEmail.error = getString(R.string.email_is_required)
             return false
         }
         if (phone.isEmpty()) {
-            binding.tilPhone.error = "Phone is required"
+            binding.tilPhone.error = getString(R.string.phone_is_required)
             return false
         }
         if (password.isEmpty()) {
-            binding.tilPassword.error = "Password is required"
+            binding.tilPassword.error = getString(R.string.password_is_required)
             return false
         }
         if (password != confirmPassword) {
-            binding.tilConfirmPassword.error = "Passwords do not match"
+            binding.tilConfirmPassword.error = getString(R.string.passwords_do_not_match)
             return false
         }
 
@@ -80,7 +81,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.btnRegister.isEnabled = true
 
                 if (response.success) {
-                    Toast.makeText(this@RegisterActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, getString(R.string.registration_successful), Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
                     Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
@@ -88,7 +89,7 @@ class RegisterActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
                 binding.btnRegister.isEnabled = true
-                Toast.makeText(this@RegisterActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@RegisterActivity, getString(R.string.error_message, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }
