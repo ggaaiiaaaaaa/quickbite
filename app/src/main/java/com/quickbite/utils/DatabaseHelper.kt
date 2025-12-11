@@ -2,21 +2,17 @@ package com.quickbite.utils
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.quickbite.database.AppDatabase
 import com.quickbite.models.*
 import com.quickbite.repository.*
 import kotlinx.coroutines.tasks.await
 
-/**
- * Facade class that provides a unified interface to Firebase repositories
- * Used by activities that need to interact with backend services
- */
 class DatabaseHelper {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Repositories will be initialized with context when needed
     private var productRepo: FirebaseProductRepository? = null
     private var branchRepo: FirebaseBranchRepository? = null
     private var orderRepo: FirebaseOrderRepository? = null
@@ -55,7 +51,11 @@ class DatabaseHelper {
 
             BranchListResponse(success = true, branches = branches)
         } catch (e: Exception) {
-            BranchListResponse(success = false, branches = emptyList(), message = e.message ?: "Failed to fetch branches")
+            BranchListResponse(
+                success = false,
+                branches = emptyList(),
+                message = e.message ?: "Failed to fetch branches"
+            )
         }
     }
 
@@ -71,7 +71,7 @@ class DatabaseHelper {
                 .await()
 
             val products = snapshot.documents.map { doc ->
-                Product(
+                MenuProduct(
                     id = doc.id.toIntOrNull() ?: 0,
                     name = doc.getString("name") ?: "",
                     description = doc.getString("description") ?: "",
@@ -90,7 +90,11 @@ class DatabaseHelper {
 
             MenuResponse(success = true, products = products)
         } catch (e: Exception) {
-            MenuResponse(success = false, products = emptyList(), message = e.message ?: "Failed to fetch products")
+            MenuResponse(
+                success = false,
+                products = emptyList(),
+                message = e.message ?: "Failed to fetch products"
+            )
         }
     }
 
@@ -102,7 +106,7 @@ class DatabaseHelper {
                 .await()
 
             if (doc.exists()) {
-                val product = Product(
+                val product = MenuProduct(
                     id = productId,
                     name = doc.getString("name") ?: "",
                     description = doc.getString("description") ?: "",
@@ -119,10 +123,18 @@ class DatabaseHelper {
                 )
                 ProductDetailResponse(success = true, product = product)
             } else {
-                ProductDetailResponse(success = false, product = Product(0, "", "", 0.0, "", ""), message = "Product not found")
+                ProductDetailResponse(
+                    success = false,
+                    product = MenuProduct(0, "", "", 0.0, "", ""),
+                    message = "Product not found"
+                )
             }
         } catch (e: Exception) {
-            ProductDetailResponse(success = false, product = Product(0, "", "", 0.0, "", ""), message = e.message ?: "Failed to fetch product")
+            ProductDetailResponse(
+                success = false,
+                product = MenuProduct(0, "", "", 0.0, "", ""),
+                message = e.message ?: "Failed to fetch product"
+            )
         }
     }
 
@@ -157,7 +169,6 @@ class DatabaseHelper {
                 .set(orderMap)
                 .await()
 
-            // Save order items
             val itemsMap = orderRequest.items.map { item ->
                 hashMapOf(
                     "productId" to item.productId.toString(),
@@ -231,7 +242,7 @@ class DatabaseHelper {
         return try {
             val snapshot = firestore.collection("orders")
                 .whereEqualTo("userId", userId.toString())
-                .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
 
@@ -242,7 +253,7 @@ class DatabaseHelper {
                     date = formatTimestamp(doc.getLong("createdAt") ?: 0),
                     total = doc.getDouble("total") ?: 0.0,
                     status = doc.getString("status") ?: "",
-                    items = emptyList() // Items would need separate fetch if needed
+                    items = emptyList()
                 )
             }
 
@@ -258,16 +269,21 @@ class DatabaseHelper {
 
     // ============ USER OPERATIONS ============
 
-    suspend fun registerUser(name: String, email: String, password: String, phone: String): RegisterResponse {
+    suspend fun registerUser(
+        name: String,
+        email: String,
+        password: String,
+        phone: String
+    ): RegisterResponse {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val userId = result.user?.uid ?: throw Exception("Failed to create user")
 
-            // Save user data to Firestore
             val userMap = hashMapOf(
                 "name" to name,
                 "email" to email,
                 "phone" to phone,
+                "role" to "customer",
                 "createdAt" to System.currentTimeMillis()
             )
 
@@ -284,7 +300,12 @@ class DatabaseHelper {
 
     // ============ RATING OPERATIONS ============
 
-    suspend fun submitRating(orderId: Int, userId: Int, rating: Float, review: String): RatingResponse {
+    suspend fun submitRating(
+        orderId: Int,
+        userId: Int,
+        rating: Float,
+        review: String
+    ): RatingResponse {
         return try {
             val ratingMap = hashMapOf(
                 "orderId" to orderId.toString(),

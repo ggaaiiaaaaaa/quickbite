@@ -16,20 +16,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickBite"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <!-- Firebase Messaging Service -->
         <service
-            android:name="com.quickbite.services.MyFirebaseMessagingService"
+            android:name=".services.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <!-- Activities -->
+        <!-- Splash Activity -->
         <activity
-            android:name="com.quickbite.activities.SplashActivity"
+            android:name=".activities.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.QuickBite.Splash">
             <intent-filter>
@@ -38,35 +39,108 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.quickbite.activities.AuthActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.AdminAuthActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.RegisterActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.BranchSelectActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.MainActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.ProductDetailActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.CustomizeItemActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.OrderTypeActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.PaymentActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.OrderTrackingActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.OrderCompleteActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.OrderHistoryActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.AdminDashboardActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.ViewProductsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.TransactionsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.LiveOrdersActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.OrderDetailsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.MenuManagementActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.AddEditProductActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.InventoryActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.AddEditInventoryItemActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.ReportsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.SalesReportsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.PerformanceAnalyticsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.UserManagementActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.CustomerAccountsActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.StaffManagementActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.AddEditStaffActivity" android:exported="false" />
-        <activity android:name="com.quickbite.activities.SystemSettingsActivity" android:exported="false" />
+        <!-- Auth Activities -->
+        <activity
+            android:name=".activities.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AdminAuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Main Activities -->
+        <activity
+            android:name=".activities.BranchSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- Product Activities -->
+        <activity
+            android:name=".activities.ProductDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.CustomizeItemActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.ProductDetailActivity" />
+
+        <!-- Order Activities -->
+        <activity
+            android:name=".activities.OrderTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OrderTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OrderCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OrderHistoryActivity"
+            android:exported="false" />
+
+        <!-- Admin Activities -->
+        <activity
+            android:name=".activities.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ViewProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.TransactionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LiveOrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MenuManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddEditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.InventoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddEditInventoryItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ReportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SalesReportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PerformanceAnalyticsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.UserManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CustomerAccountsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.StaffManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddEditStaffActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SystemSettingsActivity"
+            android:exported="false" />
 
     </application>
 

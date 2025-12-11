@@ -1,5 +1,3 @@
-// In C:/Users/LEGION/AndroidStudioProjects/App/app/src/main/java/com/quickbite/repository/FirebaseAuthRepository.kt
-
 package com.quickbite.repository
 
 import com.google.firebase.auth.FirebaseAuth

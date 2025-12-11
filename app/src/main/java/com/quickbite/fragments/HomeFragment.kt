@@ -1,4 +1,5 @@
 package com.quickbite.fragments
+
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -64,18 +65,16 @@ class HomeFragment : Fragment() {
 
         // Seasonal Items
         seasonalAdapter = MenuProductAdapter { product ->
-            // Convert the Int ID to a String before passing it
-            openProductDetails(product.id.toString())
+            openProductDetails(product.id)
         }
         binding.rvSeasonalItems.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = seasonalAdapter
         }
 
-// All Menu Items
+        // All Menu Items
         menuAdapter = MenuProductAdapter { product ->
-            // Also convert the Int ID to a String here
-            openProductDetails(product.id.toString())
+            openProductDetails(product.id)
         }
         binding.rvMenuItems.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -109,7 +108,7 @@ class HomeFragment : Fragment() {
         val categories = listOf("All", "Donuts", "Coffee", "Beverages", "Breakfast", "Snacks")
         categoryAdapter.submitList(categories)
 
-        // Load seasonal items from SQLite (synced from Firebase)
+        // Load seasonal items
         lifecycleScope.launch {
             productRepository.getSeasonalProducts().collect { products ->
                 seasonalAdapter.submitList(products.map { it.toProduct() })
@@ -152,7 +151,7 @@ class HomeFragment : Fragment() {
 
     private fun openProductDetails(productId: String) {
         val intent = Intent(requireContext(), ProductDetailActivity::class.java)
-        intent.putExtra("product_id", productId)
+        intent.putExtra("product_id", productId.toIntOrNull() ?: 0)
         startActivity(intent)
     }
 
@@ -162,10 +161,10 @@ class HomeFragment : Fragment() {
     }
 }
 
-// Extension function to convert Entity to Model
+// Extension function to convert ProductEntity to Product
 private fun com.quickbite.database.entities.ProductEntity.toProduct() =
     com.quickbite.models.Product(
-        id = this.id.toIntOrNull() ?: 0,
+        id = this.id,
         name = this.name,
         description = this.description,
         price = this.price,
@@ -177,5 +176,6 @@ private fun com.quickbite.database.entities.ProductEntity.toProduct() =
         fat = this.fat,
         carbs = this.carbs,
         protein = this.protein,
-        allergens = this.allergens
+        allergens = this.allergens,
+        isAvailable = this.isAvailable
     )

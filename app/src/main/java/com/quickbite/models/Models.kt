@@ -32,7 +32,7 @@ data class RegisterResponse(
 data class Branch(
     val id: Int,
     val name: String,
-    val type: String, // "Kiosk", "Mall", "Drive-Thru"
+    val type: String,
     val address: String,
     val distance: Double,
     @SerializedName("operating_hours") val operatingHours: String,
@@ -54,8 +54,8 @@ data class BranchDetailResponse(
     val message: String = ""
 )
 
-// Menu/Product Models
-data class Product(
+// Menu/Product Models - Simplified for consistency
+data class MenuProduct(
     val id: Int,
     val name: String,
     val description: String,
@@ -73,13 +73,13 @@ data class Product(
 
 data class MenuResponse(
     val success: Boolean,
-    val products: List<Product>,
+    val products: List<MenuProduct>,
     val message: String = ""
 )
 
 data class ProductDetailResponse(
     val success: Boolean,
-    val product: Product,
+    val product: MenuProduct,
     val message: String = ""
 )
 
@@ -110,7 +110,7 @@ data class CartItem(
 data class OrderRequest(
     @SerializedName("user_id") val userId: Int,
     @SerializedName("branch_id") val branchId: Int,
-    @SerializedName("order_type") val orderType: String, // "Dine-In", "Take-Out", "Drive-Thru"
+    @SerializedName("order_type") val orderType: String,
     @SerializedName("table_number") val tableNumber: String = "",
     @SerializedName("pickup_time") val pickupTime: String = "",
     val items: List<OrderItemRequest>,
@@ -125,7 +125,7 @@ data class OrderRequest(
 data class OrderItemRequest(
     @SerializedName("product_id") val productId: Int,
     val quantity: Int,
-    val customizations: String, // JSON string of CustomizationOptions
+    val customizations: String,
     val price: Double
 )
 
@@ -140,7 +140,7 @@ data class OrderStatusResponse(
     val success: Boolean,
     @SerializedName("order_id") val orderId: Int,
     @SerializedName("order_number") val orderNumber: String,
-    val status: String, // "Received", "Preparing", "Ready", "Completed"
+    val status: String,
     @SerializedName("estimated_time") val estimatedTime: Int,
     val message: String = ""
 )
@@ -205,6 +205,6 @@ data class FavoriteResponse(
 
 data class FavoritesResponse(
     val success: Boolean,
-    val favorites: List<Product>,
+    val favorites: List<MenuProduct>,
     val message: String = ""
 )

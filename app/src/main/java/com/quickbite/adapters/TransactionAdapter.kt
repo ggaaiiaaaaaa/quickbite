@@ -8,13 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.quickbite.R
 import com.quickbite.models.Transaction
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class TransactionAdapter(private val transactions: List<Transaction>) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(
+    private val transactions: List<Transaction>,
+    private val onViewDetailsClick: ((Transaction) -> Unit)? = null
+) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_transaction, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_transaction, parent, false)
         return TransactionViewHolder(view)
     }
 
@@ -34,15 +36,23 @@ class TransactionAdapter(private val transactions: List<Transaction>) : Recycler
         private val btnViewDetails: Button = itemView.findViewById(R.id.btnViewDetails)
 
         fun bind(transaction: Transaction) {
-            tvTransactionId.text = transaction.id
-            val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            tvTransactionDate.text = sdf.format(transaction.date)
+            tvTransactionId.text = transaction.transactionId
+            tvTransactionDate.text = transaction.getFormattedDate()
             tvCustomerName.text = transaction.customerName
-            tvTotalAmount.text = String.format("$%.2f", transaction.totalAmount)
+            tvTotalAmount.text = String.format("₱%.2f", transaction.totalAmount)
             tvStatus.text = transaction.status
 
+            // Color code status
+            val statusColor = when (transaction.status.lowercase()) {
+                "completed" -> android.graphics.Color.parseColor("#4CAF50")
+                "pending" -> android.graphics.Color.parseColor("#FF9800")
+                "cancelled" -> android.graphics.Color.parseColor("#F44336")
+                else -> android.graphics.Color.parseColor("#757575")
+            }
+            tvStatus.setTextColor(statusColor)
+
             btnViewDetails.setOnClickListener {
-                // Handle view details click
+                onViewDetailsClick?.invoke(transaction)
             }
         }
     }
